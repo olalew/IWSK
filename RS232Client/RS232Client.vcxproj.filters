@@ -29,6 +29,12 @@
     <ClInclude Include="ConfigurationForm.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="Endpoint.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="TokenizerService.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinformsProjekt.cpp">
@@ -41,6 +47,12 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="ConfigurationForm.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="Endpoint.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="TokenizerService.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
