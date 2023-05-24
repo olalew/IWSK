@@ -1,0 +1,3 @@
+C:\Users\olale\source\repos\RS232Client\RS232Client\Debug\RS232Client.vcxproj.AssemblyReference.cache
+C:\Users\olale\source\repos\RS232Client\RS232Client\Debug\RS232Client.vcxproj.GenerateResource.cache
+C:\Users\olale\source\repos\RS232Client\RS232Client\Debug\RS232Client.ConfigurationForm.resources
