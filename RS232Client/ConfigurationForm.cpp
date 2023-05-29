@@ -53,3 +53,20 @@ System::Void CppCLRWinformsProjekt::ConfigurationForm::readDefaultConfiguration(
 System::Void CppCLRWinformsProjekt::ConfigurationForm::autoConfiguration(System::Object^ sender, System::EventArgs^ e) {
 
 }
+
+System::Void CppCLRWinformsProjekt::ConfigurationForm::comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+	bool customTerminatorMode = this->terminatorComboBox->SelectedItem == "Custom";
+	this->ownLabel->Visible = customTerminatorMode;
+	this->ownTerminatorTextBox->Visible = customTerminatorMode;
+}
+
+System::Void CppCLRWinformsProjekt::ConfigurationForm::updateTerminatorString() {
+	
+	String^ terminator = (String^)this->terminatorComboBox->Items[0];
+	TokenizerMode mode = Tokenizer::parseTokenizerModeString(msclr::interop::marshal_as<std::string>(terminator));
+
+	String^ customTerminatorString = (String^)this->ownTerminatorTextBox->Text;
+	std::string customTerminator = msclr::interop::marshal_as<std::string>(customTerminatorString);
+
+	this->tokenizer->setTerminator(mode, customTerminator);
+}

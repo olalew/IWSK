@@ -41,6 +41,8 @@ namespace CppCLRWinformsProjekt {
 
 	private:
 		bool portComSet = false;
+	private:
+		Tokenizer* tokenizer = new StringTokenizer();
 
 	private: System::Windows::Forms::Label^ label1;
 	protected:
@@ -64,9 +66,9 @@ namespace CppCLRWinformsProjekt {
 	private: System::Windows::Forms::RadioButton^ radioButton1;
 	private: System::Windows::Forms::RadioButton^ radioButton2;
 	private: System::Windows::Forms::Label^ label8;
-	private: System::Windows::Forms::ComboBox^ comboBox1;
-	private: System::Windows::Forms::Label^ label9;
-	private: System::Windows::Forms::TextBox^ textBox4;
+	private: System::Windows::Forms::ComboBox^ terminatorComboBox;
+	private: System::Windows::Forms::Label^ ownLabel;
+	private: System::Windows::Forms::TextBox^ ownTerminatorTextBox;
 	private: System::Windows::Forms::Label^ label10;
 	private: System::Windows::Forms::Label^ label11;
 	private: System::Windows::Forms::Button^ button2;
@@ -107,9 +109,9 @@ namespace CppCLRWinformsProjekt {
 			this->radioButton1 = (gcnew System::Windows::Forms::RadioButton());
 			this->radioButton2 = (gcnew System::Windows::Forms::RadioButton());
 			this->label8 = (gcnew System::Windows::Forms::Label());
-			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
-			this->label9 = (gcnew System::Windows::Forms::Label());
-			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
+			this->terminatorComboBox = (gcnew System::Windows::Forms::ComboBox());
+			this->ownLabel = (gcnew System::Windows::Forms::Label());
+			this->ownTerminatorTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->label10 = (gcnew System::Windows::Forms::Label());
 			this->label11 = (gcnew System::Windows::Forms::Label());
 			this->button2 = (gcnew System::Windows::Forms::Button());
@@ -133,7 +135,7 @@ namespace CppCLRWinformsProjekt {
 			this->comPortsComboBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comPortsComboBox->FormattingEnabled = true;
 			this->comPortsComboBox->Location = System::Drawing::Point(160, 80);
-			this->comPortsComboBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->comPortsComboBox->Margin = System::Windows::Forms::Padding(2);
 			this->comPortsComboBox->Name = L"comPortsComboBox";
 			this->comPortsComboBox->Size = System::Drawing::Size(108, 21);
 			this->comPortsComboBox->TabIndex = 1;
@@ -143,7 +145,7 @@ namespace CppCLRWinformsProjekt {
 			// 
 			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->textBox1->Location = System::Drawing::Point(158, 184);
-			this->textBox1->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->textBox1->Margin = System::Windows::Forms::Padding(2);
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(108, 20);
 			this->textBox1->TabIndex = 2;
@@ -166,7 +168,7 @@ namespace CppCLRWinformsProjekt {
 				static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(0)));
 			this->saveConfigurationButton->ForeColor = System::Drawing::SystemColors::Control;
 			this->saveConfigurationButton->Location = System::Drawing::Point(54, 396);
-			this->saveConfigurationButton->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->saveConfigurationButton->Margin = System::Windows::Forms::Padding(2);
 			this->saveConfigurationButton->Name = L"saveConfigurationButton";
 			this->saveConfigurationButton->Size = System::Drawing::Size(212, 38);
 			this->saveConfigurationButton->TabIndex = 4;
@@ -190,7 +192,7 @@ namespace CppCLRWinformsProjekt {
 			this->bitsCountComboBox->FormattingEnabled = true;
 			this->bitsCountComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"7", L"8" });
 			this->bitsCountComboBox->Location = System::Drawing::Point(158, 212);
-			this->bitsCountComboBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->bitsCountComboBox->Margin = System::Windows::Forms::Padding(2);
 			this->bitsCountComboBox->Name = L"bitsCountComboBox";
 			this->bitsCountComboBox->Size = System::Drawing::Size(108, 21);
 			this->bitsCountComboBox->TabIndex = 6;
@@ -211,7 +213,7 @@ namespace CppCLRWinformsProjekt {
 			this->controlTypeComboBox->FormattingEnabled = true;
 			this->controlTypeComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"E", L"O", L"N" });
 			this->controlTypeComboBox->Location = System::Drawing::Point(158, 238);
-			this->controlTypeComboBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->controlTypeComboBox->Margin = System::Windows::Forms::Padding(2);
 			this->controlTypeComboBox->Name = L"controlTypeComboBox";
 			this->controlTypeComboBox->Size = System::Drawing::Size(108, 21);
 			this->controlTypeComboBox->TabIndex = 8;
@@ -233,7 +235,7 @@ namespace CppCLRWinformsProjekt {
 			this->stopBitCountComboBox->FormattingEnabled = true;
 			this->stopBitCountComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"1", L"2" });
 			this->stopBitCountComboBox->Location = System::Drawing::Point(158, 267);
-			this->stopBitCountComboBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->stopBitCountComboBox->Margin = System::Windows::Forms::Padding(2);
 			this->stopBitCountComboBox->Name = L"stopBitCountComboBox";
 			this->stopBitCountComboBox->Size = System::Drawing::Size(108, 21);
 			this->stopBitCountComboBox->TabIndex = 10;
@@ -244,7 +246,7 @@ namespace CppCLRWinformsProjekt {
 			this->refreshButton->BackColor = System::Drawing::SystemColors::MenuHighlight;
 			this->refreshButton->ForeColor = System::Drawing::SystemColors::Control;
 			this->refreshButton->Location = System::Drawing::Point(54, 110);
-			this->refreshButton->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->refreshButton->Margin = System::Windows::Forms::Padding(2);
 			this->refreshButton->Name = L"refreshButton";
 			this->refreshButton->Size = System::Drawing::Size(214, 35);
 			this->refreshButton->TabIndex = 11;
@@ -256,7 +258,7 @@ namespace CppCLRWinformsProjekt {
 			// 
 			this->autoconfigurationButton->BackColor = System::Drawing::SystemColors::ControlDark;
 			this->autoconfigurationButton->Location = System::Drawing::Point(54, 345);
-			this->autoconfigurationButton->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->autoconfigurationButton->Margin = System::Windows::Forms::Padding(2);
 			this->autoconfigurationButton->Name = L"autoconfigurationButton";
 			this->autoconfigurationButton->Size = System::Drawing::Size(214, 38);
 			this->autoconfigurationButton->TabIndex = 12;
@@ -268,7 +270,7 @@ namespace CppCLRWinformsProjekt {
 			// 
 			this->textBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->textBox2->Location = System::Drawing::Point(351, 289);
-			this->textBox2->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->textBox2->Margin = System::Windows::Forms::Padding(2);
 			this->textBox2->Multiline = true;
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(549, 142);
@@ -277,7 +279,7 @@ namespace CppCLRWinformsProjekt {
 			// button1
 			// 
 			this->button1->Location = System::Drawing::Point(772, 449);
-			this->button1->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->button1->Margin = System::Windows::Forms::Padding(2);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(128, 38);
 			this->button1->TabIndex = 14;
@@ -290,7 +292,7 @@ namespace CppCLRWinformsProjekt {
 			this->textBox3->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->textBox3->Enabled = false;
 			this->textBox3->Location = System::Drawing::Point(351, 134);
-			this->textBox3->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->textBox3->Margin = System::Windows::Forms::Padding(2);
 			this->textBox3->Multiline = true;
 			this->textBox3->Name = L"textBox3";
 			this->textBox3->Size = System::Drawing::Size(549, 136);
@@ -324,6 +326,7 @@ namespace CppCLRWinformsProjekt {
 			this->radioButton1->TabStop = true;
 			this->radioButton1->Text = L"Tekst";
 			this->radioButton1->UseVisualStyleBackColor = true;
+			this->radioButton1->CheckedChanged += gcnew System::EventHandler(this, &ConfigurationForm::radioButton1_CheckedChanged);
 			// 
 			// radioButton2
 			// 
@@ -335,6 +338,7 @@ namespace CppCLRWinformsProjekt {
 			this->radioButton2->TabStop = true;
 			this->radioButton2->Text = L"Hex";
 			this->radioButton2->UseVisualStyleBackColor = true;
+			this->radioButton2->CheckedChanged += gcnew System::EventHandler(this, &ConfigurationForm::radioButton2_CheckedChanged);
 			// 
 			// label8
 			// 
@@ -345,29 +349,33 @@ namespace CppCLRWinformsProjekt {
 			this->label8->TabIndex = 21;
 			this->label8->Text = L"Terminator";
 			// 
-			// comboBox1
+			// terminatorComboBox
 			// 
-			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Location = System::Drawing::Point(457, 53);
-			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(108, 21);
-			this->comboBox1->TabIndex = 22;
+			this->terminatorComboBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->terminatorComboBox->FormattingEnabled = true;
+			this->terminatorComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(5) { L"NONE", L"CR", L"LF", L"CR-LF", L"CUSTOM" });
+			this->terminatorComboBox->Location = System::Drawing::Point(457, 53);
+			this->terminatorComboBox->Name = L"terminatorComboBox";
+			this->terminatorComboBox->Size = System::Drawing::Size(108, 21);
+			this->terminatorComboBox->TabIndex = 22;
+			this->terminatorComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &ConfigurationForm::comboBox1_SelectedIndexChanged);
 			// 
-			// label9
+			// ownLabel
 			// 
-			this->label9->AutoSize = true;
-			this->label9->Location = System::Drawing::Point(351, 91);
-			this->label9->Name = L"label9";
-			this->label9->Size = System::Drawing::Size(44, 13);
-			this->label9->TabIndex = 23;
-			this->label9->Text = L"Własny";
+			this->ownLabel->AutoSize = true;
+			this->ownLabel->Location = System::Drawing::Point(351, 91);
+			this->ownLabel->Name = L"ownLabel";
+			this->ownLabel->Size = System::Drawing::Size(44, 13);
+			this->ownLabel->TabIndex = 23;
+			this->ownLabel->Text = L"Własny";
+			this->ownLabel->Visible = false;
 			// 
-			// textBox4
+			// ownTerminatorTextBox
 			// 
-			this->textBox4->Location = System::Drawing::Point(457, 88);
-			this->textBox4->Name = L"textBox4";
-			this->textBox4->Size = System::Drawing::Size(108, 20);
-			this->textBox4->TabIndex = 24;
+			this->ownTerminatorTextBox->Location = System::Drawing::Point(457, 88);
+			this->ownTerminatorTextBox->Name = L"ownTerminatorTextBox";
+			this->ownTerminatorTextBox->Size = System::Drawing::Size(108, 20);
+			this->ownTerminatorTextBox->TabIndex = 24;
 			// 
 			// label10
 			// 
@@ -426,9 +434,9 @@ namespace CppCLRWinformsProjekt {
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->label11);
 			this->Controls->Add(this->label10);
-			this->Controls->Add(this->textBox4);
-			this->Controls->Add(this->label9);
-			this->Controls->Add(this->comboBox1);
+			this->Controls->Add(this->ownTerminatorTextBox);
+			this->Controls->Add(this->ownLabel);
+			this->Controls->Add(this->terminatorComboBox);
 			this->Controls->Add(this->label8);
 			this->Controls->Add(this->radioButton2);
 			this->Controls->Add(this->radioButton1);
@@ -450,7 +458,7 @@ namespace CppCLRWinformsProjekt {
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->comPortsComboBox);
 			this->Controls->Add(this->label1);
-			this->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"ConfigurationForm";
 			this->Text = L"Form1";
 			this->ResumeLayout(false);
@@ -491,5 +499,36 @@ namespace CppCLRWinformsProjekt {
 		this->controlTypeComboBox->Enabled = enabled;
 		this->stopBitCountComboBox->Enabled = enabled;
 	}
+	private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e);
+
+	private: System::Void updateTerminatorString();
+
+	private: System::Void radioButton1_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		handleEditorChanged();
+	}
+
+	private: System::Void radioButton2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		handleEditorChanged();
+	}
+	
+	private: System::Void handleEditorChanged() {
+		TokenizerMode mode = this->tokenizer->getTokenizerMode();
+		std::string customTerminator = this->tokenizer->getCustomTerminator();
+
+		bool textEditorSelected = this->radioButton1->Checked;
+
+		if (textEditorSelected && this->tokenizer->getEditMode() != EditMode::TEXT) {
+			this->tokenizer = new StringTokenizer();
+		}
+
+		if (!textEditorSelected && this->tokenizer->getEditMode() != EditMode::HEX) {
+			this->tokenizer = new HexTokenizer();
+		}
+
+		this->tokenizer->setTerminator(mode, customTerminator);
+	}
+
 	};
+
+
 }
