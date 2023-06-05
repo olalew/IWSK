@@ -451,7 +451,7 @@ namespace CppCLRWinformsProjekt {
 			this->button4->TabIndex = 29;
 			this->button4->Text = L"PING";
 			this->button4->UseVisualStyleBackColor = true;
-			this->button3->Click += gcnew System::EventHandler(this, &ConfigurationForm::button4_Click);
+			this->button4->Click += gcnew System::EventHandler(this, &ConfigurationForm::button4_Click);
 			// 
 			// ConfigurationForm
 			// 
@@ -705,8 +705,8 @@ namespace CppCLRWinformsProjekt {
 			return;
 		}
 
-		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, 
-			this->textBox2->ToString(), 2, this->textBox2->ToString()->Length);
+		System::String^ toWrite = this->textBox2->Text->ToString() + tokenizer->getTerminator();
+		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, toWrite, 2, toWrite->Length);
 	}
 
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {

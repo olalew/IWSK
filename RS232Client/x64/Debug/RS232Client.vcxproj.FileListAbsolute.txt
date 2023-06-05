@@ -1,3 +1,3 @@
-C:\Users\olale\OneDrive\Pulpit\Uczelnia\S6\IWSK\IWSK\RS232Client\x64\Debug\RS232Client.vcxproj.AssemblyReference.cache
 C:\Users\olale\OneDrive\Pulpit\Uczelnia\S6\IWSK\IWSK\RS232Client\x64\Debug\RS232Client.ConfigurationForm.resources
 C:\Users\olale\OneDrive\Pulpit\Uczelnia\S6\IWSK\IWSK\RS232Client\x64\Debug\RS232Client.vcxproj.GenerateResource.cache
+C:\Users\olale\OneDrive\Pulpit\Uczelnia\S6\IWSK\IWSK\RS232Client\x64\Debug\RS232Client.vcxproj.AssemblyReference.cache

@@ -82,7 +82,7 @@ int SerialPortManager::readSerialPort(HANDLE serialHandle, System::String^% rece
 				receivedData += gcnew System::String(temp.c_str());
 			}
 
-			if (terminator->Length == 0 || receivedData->Contains(terminator)) {
+			if (receivedData != nullptr && (terminator->Length == 0 || receivedData->Contains(terminator))) {
 				// Stop reading if the condition is met
 				return headerBuffer[0];
 			}
@@ -175,14 +175,14 @@ HANDLE SerialPortManager::setupConnection(HANDLE& serialHandle) {
 	}
 
 	// Set timeouts
-	COMMTIMEOUTS timeout = { 0 };
-	timeout.ReadIntervalTimeout = 1000;
-	timeout.ReadTotalTimeoutConstant = 1000;
-	timeout.ReadTotalTimeoutMultiplier = 1000;
-	timeout.WriteTotalTimeoutConstant = 1000;
-	timeout.WriteTotalTimeoutMultiplier = 1000;
+	COMMTIMEOUTS timeouts = { 0 };
+	timeouts.ReadIntervalTimeout = MAXDWORD;      // Allow immediate return for read operations
+	timeouts.ReadTotalTimeoutMultiplier = 0;      // Disable additional timeout based on bytes to read
+	timeouts.ReadTotalTimeoutConstant = 100;      // Set a read timeout of 100 milliseconds
+	timeouts.WriteTotalTimeoutMultiplier = 0;     // Disable additional timeout based on bytes to write
+	timeouts.WriteTotalTimeoutConstant = 0;       // Disable constant timeout for write operations
 
-	if (!SetCommTimeouts(serialHandle, &timeout)) {
+	if (!SetCommTimeouts(serialHandle, &timeouts)) {
 		System::Windows::Forms::MessageBox::Show("Nie uda³o siê ustawiæ timeoutów", "B³¹d",
 			System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
 		CloseHandle(serialHandle);
