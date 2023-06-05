@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Endpoint.h"
 #include "TokenizerService.h"
+#include "SerialPortManager.h"
 
 namespace CppCLRWinformsProjekt {
 
@@ -11,7 +12,8 @@ namespace CppCLRWinformsProjekt {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	static CustomPortConfiguration portConfiguration;
+	static bool listenBackground = false;
+	static std::string AUTOBAUDING_SEQUENCE = "00000@###";
 
 	/// <summary>
 	/// Zusammenfassung für Form1
@@ -42,7 +44,13 @@ namespace CppCLRWinformsProjekt {
 	private:
 		bool portComSet = false;
 	private:
-		Tokenizer* tokenizer = new StringTokenizer();
+		Tokenizer^ tokenizer = gcnew StringTokenizer();
+	public:
+		static HANDLE communicationHandle;
+		static bool isCommunicationOpen;
+		static CustomPortConfiguration^ portConfiguration = gcnew CustomPortConfiguration();
+
+#pragma region Control Declaration
 
 	private: System::Windows::Forms::Label^ label1;
 	protected:
@@ -74,6 +82,9 @@ namespace CppCLRWinformsProjekt {
 	private: System::Windows::Forms::Button^ button2;
 	private: System::Windows::Forms::Button^ button3;
 	private: System::Windows::Forms::Button^ button4;
+
+
+#pragma endregion
 
 	private:
 		/// <summary>
@@ -405,6 +416,7 @@ namespace CppCLRWinformsProjekt {
 			this->button2->TabIndex = 27;
 			this->button2->Text = L"STOP";
 			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &ConfigurationForm::button2_Click);
 			// 
 			// button3
 			// 
@@ -414,6 +426,7 @@ namespace CppCLRWinformsProjekt {
 			this->button3->TabIndex = 28;
 			this->button3->Text = L"START";
 			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &ConfigurationForm::button3_Click);
 			// 
 			// button4
 			// 
@@ -466,6 +479,9 @@ namespace CppCLRWinformsProjekt {
 
 		}
 #pragma endregion
+
+#pragma region Configuration
+
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -481,12 +497,18 @@ namespace CppCLRWinformsProjekt {
 
 	}
 	private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-		if (System::Text::RegularExpressions::Regex::IsMatch(textBox1->Text, "[^0-9]"))
+		if (System::Text::RegularExpressions::Regex::IsMatch(textBox1->Text, "[0-9]+"))
 		{
 			int value = System::Int32::Parse(textBox1->Text);
 			if (value > 115000) {
 				textBox1->Text = textBox1->Text->Remove(textBox1->Text->Length - 1);
 			}
+			else {
+				ConfigurationForm::portConfiguration->baudRate = value;
+			}
+		}
+		else {
+			textBox1->Text = textBox1->Text->Remove(textBox1->Text->Length - 1);
 		}
 	}
 
@@ -510,25 +532,82 @@ namespace CppCLRWinformsProjekt {
 	private: System::Void radioButton2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
 		handleEditorChanged();
 	}
-	
+
+
 	private: System::Void handleEditorChanged() {
 		TokenizerMode mode = this->tokenizer->getTokenizerMode();
-		std::string customTerminator = this->tokenizer->getCustomTerminator();
 
 		bool textEditorSelected = this->radioButton1->Checked;
 
 		if (textEditorSelected && this->tokenizer->getEditMode() != EditMode::TEXT) {
-			this->tokenizer = new StringTokenizer();
+			this->tokenizer = gcnew StringTokenizer();
 		}
 
 		if (!textEditorSelected && this->tokenizer->getEditMode() != EditMode::HEX) {
-			this->tokenizer = new HexTokenizer();
+			this->tokenizer = gcnew HexTokenizer();
 		}
 
-		this->tokenizer->setTerminator(mode, customTerminator);
+		this->tokenizer->setTerminator(mode, this->tokenizer->getCustomTerminator());
 	}
 
-	};
+
+#pragma endregion
+
+	private:
+		System::Void handle_reading(Object^ data) {
+			Tokenizer^ tokenizer = static_cast<Tokenizer^>(data);
+			
+			while (CppCLRWinformsProjekt::listenBackground) {
+				System::String^ message;
+				bool message_read = SerialPortManager::readSerialPort(
+					ConfigurationForm::communicationHandle, message, CppCLRWinformsProjekt::listenBackground,
+					tokenizer->getTerminator());
+
+				if (message_read && message->Length > 0) {
+					UpdateResponseText(message);
+				}
+
+				System::Threading::Thread::Sleep(10);
+			}
+		}
+
+	private:
+		void UpdateResponseText(System::String ^ text) {
+			if (textBox3->InvokeRequired)
+			{
+				// Invoke the method on the UI thread
+				textBox3->Invoke(gcnew Action<System::String^>(UpdateResponseText), text);
+			}
+			else
+			{
+				// Append the text to the TextBox control
+				textBox3->AppendText(text);
+			}
+		}
+
+	private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (!CppCLRWinformsProjekt::ConfigurationForm::isCommunicationOpen) {
+			System::Windows::Forms::MessageBox::Show("Najpierw należy nawiązać połączenie na porcie COM", "Błąd",
+				System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
+			return;
+		}
+
+		if (CppCLRWinformsProjekt::listenBackground) return;
+		CppCLRWinformsProjekt::listenBackground = true;
+
+
+		// Create a new thread and pass parameters using the delegate
+		System::Threading::Thread^ myThread = 
+			gcnew System::Threading::Thread(gcnew System::Threading::ParameterizedThreadStart(
+				this, &ConfigurationForm::handle_reading));
+		
+		myThread->Start(this->tokenizer);
+	}
+
+	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+		CppCLRWinformsProjekt::listenBackground = false;
+	}
+};
 
 
 }

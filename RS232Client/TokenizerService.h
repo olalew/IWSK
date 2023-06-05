@@ -19,24 +19,39 @@ enum EditMode {
 
 
 
-class Tokenizer {
+ref class Tokenizer {
 protected:
 	TokenizerMode mode = TokenizerMode::CR;
-	std::string customTerminator;
+	System::String^ customTerminator;
 public:
-	virtual std::string getContentToSend() = 0;
+	virtual System::String^ getContentToSend() = 0;
 	virtual EditMode getEditMode() = 0;
 
-	void setTerminator(TokenizerMode mode, std::string customTerminator) {
+	void setTerminator(TokenizerMode mode, System::String^ customTerminator) {
 		this->mode = mode;
 		this->customTerminator = customTerminator;
+	}
+
+	System::String^ getTerminator() {
+		switch (mode) {
+		case TokenizerMode::CR:
+			return "\r";
+		case TokenizerMode::LF:
+			return "\n";
+		case TokenizerMode::CR_LF:
+			return "\r\n";
+		case TokenizerMode::CUSTOM:
+			return customTerminator;
+		default:
+			return "";
+		}
 	}
 
 	TokenizerMode getTokenizerMode() {
 		return this->mode;
 	}
 
-	std::string getCustomTerminator() {
+	System::String^ getCustomTerminator() {
 		return this->customTerminator;
 	}
 
@@ -51,35 +66,39 @@ public:
 	}
 };
 
-class StringTokenizer: public Tokenizer
+ref class StringTokenizer : public Tokenizer
 {
 private:
-	std::string content;
+	System::String^ content;
 
 public:
 	StringTokenizer() {}
-	StringTokenizer(TokenizerMode mode, std::string customTerminator, std::string content) {
+	StringTokenizer(TokenizerMode mode, System::String^ customTerminator, System::String^ content) {
 		this->mode = mode;
 		this->customTerminator = customTerminator;
 		this->content = content;
 	}
 
-	std::string getContentToSend();
+	virtual System::String^ getContentToSend() override;
 
-	EditMode getEditMode() {
+	virtual EditMode getEditMode() override {
 		return EditMode::TEXT;
 	}
 };
 
-class HexTokenizer: public Tokenizer
+ref class HexTokenizer: public Tokenizer
 {
 private:
-	std::vector<char> content;
+	System::Collections::Generic::List<char>^ content;
 
 public:
-	std::string getContentToSend();
+	HexTokenizer() {
+		content = gcnew System::Collections::Generic::List<char>();
+	}
 
-	EditMode getEditMode() {
+	virtual System::String^ getContentToSend() override;
+
+	virtual EditMode getEditMode() override {
 		return EditMode::HEX;
 	}
 };

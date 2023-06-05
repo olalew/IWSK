@@ -17,3 +17,7 @@ Assembly System.Xml, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c5619
 Class CppCLRWinformsProjekt.ConfigurationForm: AutoLayout, AnsiClass, Class, Public, BeforeFieldInit
   :System.Windows.Forms.Form
     Void .ctor(): PrivateScope, Public, HideBySig, SpecialName, RTSpecialName
+  Fields:
+    Void* communicationHandle : Public, Static
+    Boolean isCommunicationOpen : Public, Static
+    CustomPortConfiguration portConfiguration : Public, Static
