@@ -43,6 +43,8 @@ namespace CppCLRWinformsProjekt {
 
 	private:
 		bool portComSet = false;
+		bool messsageAcknowledged = true;
+		DateTime pingStartDatetime;
 	private:
 		Tokenizer^ tokenizer = gcnew StringTokenizer();
 	public:
@@ -296,19 +298,32 @@ namespace CppCLRWinformsProjekt {
 			this->button1->TabIndex = 14;
 			this->button1->Text = L"WYŚLIJ";
 			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &ConfigurationForm::sendMessage);
 			// 
 			// textBox3
 			// 
 			this->textBox3->BackColor = System::Drawing::SystemColors::InactiveCaption;
 			this->textBox3->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox3->Enabled = false;
-			this->textBox3->Location = System::Drawing::Point(351, 134);
+			this->textBox3->ReadOnly = true;
 			this->textBox3->Margin = System::Windows::Forms::Padding(2);
 			this->textBox3->Multiline = true;
 			this->textBox3->Name = L"textBox3";
-			this->textBox3->Size = System::Drawing::Size(549, 136);
 			this->textBox3->TabIndex = 15;
 			this->textBox3->Text = L"Read incoming messages here";
+			this->textBox3->ScrollBars = ScrollBars::Vertical;
+
+			Panel^ panel = gcnew Panel();
+			panel->AutoScroll = true;
+
+			//panel->BackColor = System::Drawing::Color::Red; 
+
+			panel->Size = System::Drawing::Size(549, 136);
+			panel->Location = System::Drawing::Point(351, 134);
+
+			textBox3->Dock = DockStyle::Fill;
+			panel->Controls->Add(this->textBox3);
+
+
 			// 
 			// label6
 			// 
@@ -436,6 +451,7 @@ namespace CppCLRWinformsProjekt {
 			this->button4->TabIndex = 29;
 			this->button4->Text = L"PING";
 			this->button4->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &ConfigurationForm::button4_Click);
 			// 
 			// ConfigurationForm
 			// 
@@ -455,7 +471,8 @@ namespace CppCLRWinformsProjekt {
 			this->Controls->Add(this->radioButton1);
 			this->Controls->Add(this->label7);
 			this->Controls->Add(this->label6);
-			this->Controls->Add(this->textBox3);
+			this->Controls->Add(panel);
+			//this->Controls->Add(this->textBox3);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->textBox2);
 			this->Controls->Add(this->autoconfigurationButton);
@@ -556,32 +573,95 @@ namespace CppCLRWinformsProjekt {
 	private:
 		System::Void handle_reading(Object^ data) {
 			Tokenizer^ tokenizer = static_cast<Tokenizer^>(data);
-			
+
 			while (CppCLRWinformsProjekt::listenBackground) {
 				System::String^ message;
-				bool message_read = SerialPortManager::readSerialPort(
+				int message_type = SerialPortManager::readSerialPort(
 					ConfigurationForm::communicationHandle, message, CppCLRWinformsProjekt::listenBackground,
 					tokenizer->getTerminator());
 
-				if (message_read && message->Length > 0) {
-					UpdateResponseText(message);
+				if (message_type == -1) {
+					continue;
 				}
 
-				System::Threading::Thread::Sleep(10);
+				// 0 ping request
+				// 3 - ping acknowledgement
+				if (message_type == 0) {
+					DateTime now = DateTime::Now;
+					String^ timestamp = now.ToString() + tokenizer->getTerminator();
+
+					bool success = SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, timestamp, 3, timestamp->Length);
+					continue;
+				}
+
+				if (message_type == 1) {
+					UpdateResponseText(message);
+					// send acknowledgement message
+					bool success = SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle,
+						tokenizer->getTerminator(), 2, tokenizer->getTerminator()->Length);
+					continue;
+				}
+
+				if (message_type == 2) {
+					// message acknowledged - allow to send the next message
+					ConfigurationForm::messsageAcknowledged = true;
+					DisplayAcknowledgmentBox(NULL);
+				}
+
+				if (message_type == 3) {
+					ConfigurationForm::messsageAcknowledged = true;
+					
+					DateTime pingStart = pingStartDatetime;
+					DateTime pingResponseReceived = DateTime::Now;
+					DateTime pingRequestReceived = DateTime::Parse(message);
+
+					TimeSpan timeDiffPingStartToResponse = pingResponseReceived.Subtract(pingStart);
+					TimeSpan timeDiffPingStartToRequest = pingRequestReceived.Subtract(pingStart);
+
+					String^ result = "Ping Start: " + pingStart.ToString() + "\n"
+						+ "Ping Response Received: " + pingResponseReceived.ToString() + "\n"
+						+ "Ping Request Received: " + pingRequestReceived.ToString() + "\n"
+						+ "Time Difference (Ping Start to Response): " + timeDiffPingStartToResponse.ToString() + "\n"
+						+ "Time Difference (Ping Start to Request): " + timeDiffPingStartToRequest.ToString();
+
+					// Display the message box
+					DisplayPingResultBox(result);
+				}
 			}
 		}
 
 	private:
-		void UpdateResponseText(System::String ^ text) {
+		void UpdateResponseText(System::String^ text) {
 			if (textBox3->InvokeRequired)
 			{
-				// Invoke the method on the UI thread
-				textBox3->Invoke(gcnew Action<System::String^>(UpdateResponseText), text);
+				textBox3->Invoke(gcnew Action<System::String^>(this, &ConfigurationForm::UpdateResponseText), text);
 			}
 			else
 			{
-				// Append the text to the TextBox control
-				textBox3->AppendText(text);
+				textBox3->AppendText(Environment::NewLine + "<message>" + text + "</message>");
+			}
+		}
+
+		void DisplayAcknowledgmentBox(System::Object^ args) {
+			if (textBox3->InvokeRequired)
+			{
+				textBox3->Invoke(gcnew Action<System::Object^>(this, &ConfigurationForm::DisplayAcknowledgmentBox));
+			}
+			else
+			{
+				System::Windows::Forms::MessageBox::Show("Potwierdzono otrzymanie wiadomości przez slave", "Sukces",
+					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
+			}
+		}
+
+		void DisplayPingResultBox(System::String^ args) {
+			if (textBox3->InvokeRequired)
+			{
+				textBox3->Invoke(gcnew Action<System::String^>(this, &ConfigurationForm::DisplayPingResultBox), args);
+			}
+			else
+			{
+				MessageBox::Show(args, "Ping Information", MessageBoxButtons::OK, MessageBoxIcon::Information);
 			}
 		}
 
@@ -597,17 +677,43 @@ namespace CppCLRWinformsProjekt {
 
 
 		// Create a new thread and pass parameters using the delegate
-		System::Threading::Thread^ myThread = 
+		System::Threading::Thread^ myThread =
 			gcnew System::Threading::Thread(gcnew System::Threading::ParameterizedThreadStart(
 				this, &ConfigurationForm::handle_reading));
-		
+
+		this->label11->Text = "Started";
 		myThread->Start(this->tokenizer);
+	}
+
+	private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (!ConfigurationForm::messsageAcknowledged) {
+			System::Windows::Forms::MessageBox::Show("Nie otrzymano potwierdzenia poprzedniej operacji (Message not akcnowledged)", "Błąd",
+				System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
+			return;
+		}
+
+		this->pingStartDatetime = DateTime::Now;
+		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, "", 1, 0);
+
+		ConfigurationForm::messsageAcknowledged = false;
+	}
+
+	private: System::Void sendMessage(System::Object^ sender, System::EventArgs^ e) {
+		if (!ConfigurationForm::messsageAcknowledged) {
+			System::Windows::Forms::MessageBox::Show("Nie otrzymano potwierdzenia poprzedniej operacji (Message not akcnowledged)", "Błąd",
+				System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
+			return;
+		}
+
+		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, 
+			this->textBox2->ToString(), 2, this->textBox2->ToString()->Length);
 	}
 
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
 		CppCLRWinformsProjekt::listenBackground = false;
+		this->label11->Text = "Stopped";
 	}
-};
+	};
 
 
 }

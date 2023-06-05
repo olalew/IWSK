@@ -45,7 +45,7 @@ bool SerialPortManager::writeSerialPort(HANDLE serialHandle, System::String^ con
 	return true;
 }
 
-bool SerialPortManager::readSerialPort(HANDLE serialHandle, System::String^% receivedData, bool% shouldContinue, System::String^ terminator)
+int SerialPortManager::readSerialPort(HANDLE serialHandle, System::String^% receivedData, bool% shouldContinue, System::String^ terminator)
 {
 	const int bufferSize = 512;
 	char buffer[bufferSize];
@@ -64,11 +64,7 @@ bool SerialPortManager::readSerialPort(HANDLE serialHandle, System::String^% rec
 					// Copy the header bytes to the header buffer
 					memcpy(headerBuffer, buffer, 5);
 					if (headerBuffer[0] == 0) {
-						// handle ping
-
-						// write back message
-
-						return true;
+						return headerBuffer[0];
 					}
 
 					headerRead = true;
@@ -86,16 +82,14 @@ bool SerialPortManager::readSerialPort(HANDLE serialHandle, System::String^% rec
 				receivedData += gcnew System::String(temp.c_str());
 			}
 
-
-			// Check if the received data meets a specific condition (e.g., delimiter character)
-			if (receivedData->Contains(terminator)) {
+			if (terminator->Length == 0 || receivedData->Contains(terminator)) {
 				// Stop reading if the condition is met
-				return true;
+				return headerBuffer[0];
 			}
 		}
 		else {
 			// Handle timeout or other read errors
-			return false;
+			return -1;
 		}
 	}
 }
