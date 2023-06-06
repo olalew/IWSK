@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 ï»¿#include "pch.h"
-=======
-#include "pch.h"
->>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 #include "SerialPortManager.h"
 
 #include <msclr/marshal_cppstd.h>
@@ -30,14 +26,10 @@ bool SerialPortManager::writeSerialPort(HANDLE serialHandle, System::String^ con
 	if (!WriteFile(serialHandle, headerBuffer, sizeof(char) + sizeof(int), &numberOfBytesWritten, NULL))
 		return false;
 
-<<<<<<< HEAD
 
 	std::string stdContent = msclr::interop::marshal_as<std::string>(content);
 	const char* buffer = stdContent.data();
 
-=======
-	pin_ptr<const System::Char> pinnedContent = PtrToStringChars(content);  // Get pinned pointer to content data
->>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 
 	numberOfBytesWritten = 0;
 	while (numberOfBytesToWrite > numberOfBytesWritten) {
@@ -46,12 +38,8 @@ bool SerialPortManager::writeSerialPort(HANDLE serialHandle, System::String^ con
 			bufferLength = 512;
 		}
 
-<<<<<<< HEAD
 		int writtenCount = WriteFile(serialHandle, buffer + numberOfBytesWritten, bufferLength, &numberOfBytesWritten, NULL);
 		status = writtenCount != 0;
-=======
-		status = WriteFile(serialHandle, pinnedContent + numberOfBytesWritten, bufferLength, &numberOfBytesWritten, NULL) != 0;
->>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 
 		if (!status) {
 			return false;
@@ -105,11 +93,7 @@ int SerialPortManager::readSerialPort(HANDLE serialHandle, System::String^% rece
 		}
 		else {
 			// Handle timeout or other read errors
-<<<<<<< HEAD
 			//return -1;
-=======
-			return -1;
->>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 		}
 	}
 }
@@ -135,7 +119,6 @@ HANDLE SerialPortManager::setupConnection(HANDLE& serialHandle) {
 
 	if (serialHandle == INVALID_HANDLE_VALUE) {
 		/*
-<<<<<<< HEAD
 			IE_BADID â€“1 NiewÂ³aÅ“ciwa identyfikacja urzÂ¹dzenia
 			IE_BAUDRATE â€“12 BÂ³Ãªdnie okreÅ“lona szybkoÅ“Ã¦ transmisji
 			IE_BYTESIZE â€“11 BÂ³Ãªdnie okreÅ“lona liczba bitÃ³w danych
@@ -146,29 +129,13 @@ HANDLE SerialPortManager::setupConnection(HANDLE& serialHandle) {
 			IE_OPEN â€“2 UrzÂ¹dzenie pozostaje otwarte
 		*/
 		System::Windows::Forms::MessageBox::Show("BÂ³Â¹d przy otwieraniu portu", "BÅ‚Ä…d",
-=======
-			IE_BADID –1 Niew³aœciwa identyfikacja urz¹dzenia
-			IE_BAUDRATE –12 B³êdnie okreœlona szybkoœæ transmisji
-			IE_BYTESIZE –11 B³êdnie okreœlona liczba bitów danych
-			IE_DEFAULT –5 Niew³aœciwie okreœlone parametry domyœlne urz¹dzenia
-			IE_HARDWARE –10 Odbiornik jest zablokowany
-			IE_MEMORY –4 Niew³aœciwie ustalony rozmiar buforów
-			IE_NOPEN –3 Urz¹dzenie nie jest otwarte do transmisji
-			IE_OPEN –2 Urz¹dzenie pozostaje otwarte
-		*/
-		System::Windows::Forms::MessageBox::Show("B³¹d przy otwieraniu portu", "B³¹d",
->>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 			System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
 		CloseHandle(serialHandle);
 		return (HANDLE)-1;
 	}
 
 	if (!GetCommState(serialHandle, &portConfigurationHandle)) {
-<<<<<<< HEAD
 		System::Windows::Forms::MessageBox::Show("Nie moÂ¿na odczytaÃ¦ parametrÃ³w portu", "BÅ‚Ä…d",
-=======
-		System::Windows::Forms::MessageBox::Show("Nie mo¿na odczytaæ parametrów portu", "B³¹d",
->>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 			System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
 		CloseHandle(serialHandle);
 		return (HANDLE)-1;
@@ -205,11 +172,7 @@ HANDLE SerialPortManager::setupConnection(HANDLE& serialHandle) {
 
 	if (!SetCommState(serialHandle, &portConfigurationHandle)) {
 		DWORD error = GetLastError();
-<<<<<<< HEAD
 		System::Windows::Forms::MessageBox::Show("Nie moÂ¿na zapisaÃ¦ parametrÃ³w portu", "BÂ³Â¹d",
-=======
-		System::Windows::Forms::MessageBox::Show("Nie mo¿na zapisaæ parametrów portu", "B³¹d",
->>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 			System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
 		CloseHandle(serialHandle);
 		return (HANDLE)-1;
@@ -218,7 +181,6 @@ HANDLE SerialPortManager::setupConnection(HANDLE& serialHandle) {
 	// Set timeouts
 	COMMTIMEOUTS timeouts = { 0 };
 	timeouts.ReadIntervalTimeout = MAXDWORD;      // Allow immediate return for read operations
-<<<<<<< HEAD
 	timeouts.ReadTotalTimeoutMultiplier = MAXDWORD;      // Disable additional timeout based on bytes to read
 	timeouts.ReadTotalTimeoutConstant = 1000;      // Set a read timeout of 1000 milliseconds
 	timeouts.WriteTotalTimeoutMultiplier = MAXDWORD;     // Disable additional timeout based on bytes to write
@@ -226,26 +188,13 @@ HANDLE SerialPortManager::setupConnection(HANDLE& serialHandle) {
 
 	if (!SetCommTimeouts(serialHandle, &timeouts)) {
 		System::Windows::Forms::MessageBox::Show("Nie udaÂ³o siÃª ustawiÃ¦ timeoutÃ³w", "BÂ³Â¹d",
-=======
-	timeouts.ReadTotalTimeoutMultiplier = 0;      // Disable additional timeout based on bytes to read
-	timeouts.ReadTotalTimeoutConstant = 1000;      // Set a read timeout of 1000 milliseconds
-	timeouts.WriteTotalTimeoutMultiplier = 0;     // Disable additional timeout based on bytes to write
-	timeouts.WriteTotalTimeoutConstant = 1000;       // Disable constant timeout for write operations
-
-	if (!SetCommTimeouts(serialHandle, &timeouts)) {
-		System::Windows::Forms::MessageBox::Show("Nie uda³o siê ustawiæ timeoutów", "B³¹d",
->>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 			System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
 		CloseHandle(serialHandle);
 		return (HANDLE)-1;
 	}
 
 	if (!GetCommProperties(serialHandle, &comProperties)) {
-<<<<<<< HEAD
 		System::Windows::Forms::MessageBox::Show("Nie udaÂ³o siÃª odczytaÃ¦ parametrÃ³w portu komunikacyjnego COM", "BÂ³Â¹d",
-=======
-		System::Windows::Forms::MessageBox::Show("Nie uda³o siê odczytaæ parametrów portu komunikacyjnego COM", "B³¹d",
->>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 			System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
 		CloseHandle(serialHandle);
 		return (HANDLE)-1;
