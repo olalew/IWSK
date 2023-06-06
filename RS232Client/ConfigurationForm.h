@@ -590,8 +590,12 @@ namespace CppCLRWinformsProjekt {
 					DateTime now = DateTime::Now;
 					String^ timestamp = now.ToString() + tokenizer->getTerminator();
 
+<<<<<<< HEAD
 					bool success = SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, timestamp,
 						MessageTypesEnum::PING_ACKNOWLEDGEMENT, timestamp->Length);
+=======
+					bool success = SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, timestamp, 3, timestamp->Length);
+>>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 					continue;
 				}
 
@@ -599,7 +603,11 @@ namespace CppCLRWinformsProjekt {
 					UpdateResponseText(message);
 					// send acknowledgement message
 					bool success = SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle,
+<<<<<<< HEAD
 						tokenizer->getTerminator(), MessageTypesEnum::MESSAGE_ACKNOWLEDGEMENT, tokenizer->getTerminator()->Length);
+=======
+						tokenizer->getTerminator(), 2, tokenizer->getTerminator()->Length);
+>>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 					continue;
 				}
 
@@ -611,7 +619,11 @@ namespace CppCLRWinformsProjekt {
 
 				if (message_type == 3) {
 					ConfigurationForm::messsageAcknowledged = true;
+<<<<<<< HEAD
 
+=======
+					
+>>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 					DateTime pingStart = pingStartDatetime;
 					DateTime pingResponseReceived = DateTime::Now;
 					DateTime pingRequestReceived = DateTime::Parse(message);
@@ -620,11 +632,18 @@ namespace CppCLRWinformsProjekt {
 					TimeSpan timeDiffPingStartToRequest = pingRequestReceived.Subtract(pingStart);
 
 					String^ result = "Ping Start: " + pingStart.ToString() + "\n"
+<<<<<<< HEAD
 						+ "Ping Request Received: " + pingRequestReceived.ToString() + "\n"
 						+ "Ping Response Received: " + pingResponseReceived.ToString() + "\n\n"
 						+ "Time Difference (Ping Start to Request): " + timeDiffPingStartToRequest.TotalMilliseconds.ToString() + " ms\n"
 						+"Time Difference (Ping Start to Response): " + timeDiffPingStartToResponse.TotalMilliseconds.ToString() + " ms";
 						
+=======
+						+ "Ping Response Received: " + pingResponseReceived.ToString() + "\n"
+						+ "Ping Request Received: " + pingRequestReceived.ToString() + "\n"
+						+ "Time Difference (Ping Start to Response): " + timeDiffPingStartToResponse.ToString() + "\n"
+						+ "Time Difference (Ping Start to Request): " + timeDiffPingStartToRequest.ToString();
+>>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 
 					// Display the message box
 					DisplayPingResultBox(result);
@@ -647,11 +666,20 @@ namespace CppCLRWinformsProjekt {
 		void DisplayAcknowledgmentBox(System::Object^ args) {
 			if (textBox3->InvokeRequired)
 			{
+<<<<<<< HEAD
 				textBox3->Invoke(gcnew Action<System::Object^>(this, &ConfigurationForm::DisplayAcknowledgmentBox), NULL);
 			}
 			else
 			{
 				textBox2->Clear();
+=======
+				textBox3->Invoke(gcnew Action<System::Object^>(this, &ConfigurationForm::DisplayAcknowledgmentBox));
+			}
+			else
+			{
+				System::Windows::Forms::MessageBox::Show("Potwierdzono otrzymanie wiadomości przez slave", "Sukces",
+					System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
+>>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 			}
 		}
 
@@ -694,7 +722,11 @@ namespace CppCLRWinformsProjekt {
 		}
 
 		this->pingStartDatetime = DateTime::Now;
+<<<<<<< HEAD
 		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, "", MessageTypesEnum::PING, 0);
+=======
+		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, "", 1, 0);
+>>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 
 		ConfigurationForm::messsageAcknowledged = false;
 	}
@@ -707,7 +739,11 @@ namespace CppCLRWinformsProjekt {
 		}
 
 		System::String^ toWrite = this->textBox2->Text->ToString() + tokenizer->getTerminator();
+<<<<<<< HEAD
 		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, toWrite, MessageTypesEnum::NORMAL_MESSAGE, toWrite->Length);
+=======
+		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, toWrite, 2, toWrite->Length);
+>>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
 	}
 
 	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {

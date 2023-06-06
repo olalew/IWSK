@@ -1,9 +1,12 @@
 C:\Users\olale\OneDrive\Pulpit\Uczelnia\S6\IWSK\IWSK\RS232Client\x64\Debug\RS232Client.ConfigurationForm.resources
 C:\Users\olale\OneDrive\Pulpit\Uczelnia\S6\IWSK\IWSK\RS232Client\x64\Debug\RS232Client.vcxproj.GenerateResource.cache
 C:\Users\olale\OneDrive\Pulpit\Uczelnia\S6\IWSK\IWSK\RS232Client\x64\Debug\RS232Client.vcxproj.AssemblyReference.cache
+<<<<<<< HEAD
 C:\Users\olale\Downloads\IWSK\RS232Client\x64\Debug\RS232Client.vcxproj.AssemblyReference.cache
 C:\Users\olale\Downloads\IWSK\RS232Client\x64\Debug\RS232Client.ConfigurationForm.resources
 C:\Users\olale\Downloads\IWSK\RS232Client\x64\Debug\RS232Client.vcxproj.GenerateResource.cache
 C:\Users\olale\Downloads\IWSK\IWSK2\RS232Client\x64\Debug\RS232Client.vcxproj.AssemblyReference.cache
 C:\Users\olale\Downloads\IWSK\IWSK2\RS232Client\x64\Debug\RS232Client.ConfigurationForm.resources
 C:\Users\olale\Downloads\IWSK\IWSK2\RS232Client\x64\Debug\RS232Client.vcxproj.GenerateResource.cache
+=======
+>>>>>>> 6f038e9d32a2e609970c9e5c21c240b05df17f59
