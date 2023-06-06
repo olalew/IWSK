@@ -12,6 +12,7 @@ public:
 	System::Int32 bitCount;
 	System::Char dataControlType;
 	System::Int32 stopBitCount;
+	System::Int32 flowControl;
 
 	CustomPortConfiguration() {}
 
@@ -22,6 +23,7 @@ public:
 		bitCount = other.bitCount;
 		dataControlType = other.dataControlType;
 		stopBitCount = other.stopBitCount;
+		flowControl = other.flowControl;
 	}
 
 	std::string getPortName();

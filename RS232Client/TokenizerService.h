@@ -21,7 +21,7 @@ enum EditMode {
 
 ref class Tokenizer {
 protected:
-	TokenizerMode mode = TokenizerMode::CR;
+	TokenizerMode mode = TokenizerMode::NONE;
 	System::String^ customTerminator;
 public:
 	virtual System::String^ getContentToSend() = 0;

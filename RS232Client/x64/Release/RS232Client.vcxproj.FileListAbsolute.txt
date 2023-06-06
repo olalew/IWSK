@@ -1,2 +1,4 @@
 C:\Users\olale\Downloads\IWSK\RS232Client\x64\Release\RS232Client.ConfigurationForm.resources
 C:\Users\olale\Downloads\IWSK\RS232Client\x64\Release\RS232Client.vcxproj.GenerateResource.cache
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\x64\Release\RS232Client.ConfigurationForm.resources
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\x64\Release\RS232Client.vcxproj.GenerateResource.cache

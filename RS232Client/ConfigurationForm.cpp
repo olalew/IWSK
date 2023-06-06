@@ -21,9 +21,38 @@ System::Void CppCLRWinformsProjekt::ConfigurationForm::saveConfiguration(System:
 }
 
 System::Void CppCLRWinformsProjekt::ConfigurationForm::comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
-	bool customTerminatorMode = this->terminatorComboBox->SelectedItem == "Custom";
+	/*bool customTerminatorMode = this->terminatorComboBox->SelectedItem == "Custom";
 	this->ownLabel->Visible = customTerminatorMode;
-	this->ownTerminatorTextBox->Visible = customTerminatorMode;
+	this->ownTerminatorTextBox->Visible = customTerminatorMode;*/
+
+	int index = this->terminatorComboBox->SelectedIndex;
+	if (index == 4) {
+		this->ownLabel->Visible = true;
+		this->ownTerminatorTextBox->Visible = true;
+		tokenizer->setTerminator(TokenizerMode::CUSTOM, this->ownTerminatorTextBox->Text->ToString());
+	}
+	else {
+		this->ownLabel->Visible = false;
+		this->ownTerminatorTextBox->Visible = false;
+
+		switch (index)
+		{
+		case 0:
+			tokenizer->setTerminator(TokenizerMode::NONE, "");
+			break;
+		case 1:
+			tokenizer->setTerminator(TokenizerMode::CR, "");
+			break;
+		case 2:
+			tokenizer->setTerminator(TokenizerMode::LF, "");
+			break;
+		case 3:
+			tokenizer->setTerminator(TokenizerMode::CR_LF, "");
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 System::Void CppCLRWinformsProjekt::ConfigurationForm::updateTerminatorString() {
@@ -83,6 +112,8 @@ System::Void CppCLRWinformsProjekt::ConfigurationForm::readDefaultConfiguration(
 
 	this->stopBitCountComboBox->SelectedItem = (gcnew System::Text::StringBuilder(gcnew String(std::to_string(config->stopBitCount)
 		.c_str())))->ToString();
+
+	this->comboBox1->SelectedIndex = config->flowControl;
 }
 
 System::Void CppCLRWinformsProjekt::ConfigurationForm::autoConfiguration(System::Object^ sender, System::EventArgs^ e) {

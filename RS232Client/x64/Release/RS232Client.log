@@ -1,23 +1,98 @@
-﻿  SerialPortManager.cpp
-C:\Users\olale\Downloads\IWSK\RS232Client\TokenizerService.h(22,11): warning C4570: 'Tokenizer': is not explicitly declared as abstract but has abstract functions
-C:\Users\olale\Downloads\IWSK\RS232Client\TokenizerService.h(22,11): message : 'System::String ^Tokenizer::getContentToSend(void)': is abstract
-C:\Users\olale\Downloads\IWSK\RS232Client\TokenizerService.h(27): message : see declaration of 'Tokenizer::getContentToSend'
-C:\Users\olale\Downloads\IWSK\RS232Client\TokenizerService.h(22,11): message : 'EditMode Tokenizer::getEditMode(void)': is abstract
-C:\Users\olale\Downloads\IWSK\RS232Client\TokenizerService.h(28): message : see declaration of 'Tokenizer::getEditMode'
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(53,53): warning C4677: 'portConfiguration': signature of non-private member contains assembly private type 'CustomPortConfiguration'
-C:\Users\olale\Downloads\IWSK\RS232Client\Endpoint.h(7): message : see declaration of 'CustomPortConfiguration'
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(652,46): warning C4566: character represented by universal-character-name '\u015B' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(670,45): warning C4566: character represented by universal-character-name '\u017C' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(670,45): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(670,45): warning C4566: character represented by universal-character-name '\u0107' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(670,45): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(670,103): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(670,103): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(690,124): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(690,124): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(703,124): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(703,124): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
-C:\Users\olale\Downloads\IWSK\RS232Client\ConfigurationForm.h(608,1): warning C4965: implicit box of integer 0; use nullptr or explicit cast
-C:\Users\olale\Downloads\IWSK\RS232Client\SerialPortManager.cpp(159,34): warning C4553: '==': result of expression not used; did you intend '='?
-C:\Users\olale\Downloads\IWSK\RS232Client\SerialPortManager.cpp(95): warning C4715: 'SerialPortManager::readSerialPort': not all control paths return a value
-  RS232Client.vcxproj -> C:\Users\olale\Downloads\IWSK\x64\Release\RS232Client.exe
+﻿  pch.cpp
+  AssemblyInfo.cpp
+  CppCLR_WinformsProjekt.cpp
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): warning C4570: 'Tokenizer': is not explicitly declared as abstract but has abstract functions
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): message : 'System::String ^Tokenizer::getContentToSend(void)': is abstract
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(27): message : see declaration of 'Tokenizer::getContentToSend'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): message : 'EditMode Tokenizer::getEditMode(void)': is abstract
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(28): message : see declaration of 'Tokenizer::getEditMode'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(53,53): warning C4677: 'portConfiguration': signature of non-private member contains assembly private type 'CustomPortConfiguration'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\Endpoint.h(7): message : see declaration of 'CustomPortConfiguration'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u017C' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0107' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,103): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,103): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(701,124): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(701,124): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(714,124): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(714,124): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(619,1): warning C4965: implicit box of integer 0; use nullptr or explicit cast
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(660,1): warning C4965: implicit box of integer 0; use nullptr or explicit cast
+  ConfigurationForm.cpp
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): warning C4570: 'Tokenizer': is not explicitly declared as abstract but has abstract functions
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): message : 'System::String ^Tokenizer::getContentToSend(void)': is abstract
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(27): message : see declaration of 'Tokenizer::getContentToSend'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): message : 'EditMode Tokenizer::getEditMode(void)': is abstract
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(28): message : see declaration of 'Tokenizer::getEditMode'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(53,53): warning C4677: 'portConfiguration': signature of non-private member contains assembly private type 'CustomPortConfiguration'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\Endpoint.h(7): message : see declaration of 'CustomPortConfiguration'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u017C' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0107' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,103): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,103): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(701,124): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(701,124): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(714,124): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(714,124): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(619,1): warning C4965: implicit box of integer 0; use nullptr or explicit cast
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(660,1): warning C4965: implicit box of integer 0; use nullptr or explicit cast
+  Endpoint.cpp
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): warning C4570: 'Tokenizer': is not explicitly declared as abstract but has abstract functions
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): message : 'System::String ^Tokenizer::getContentToSend(void)': is abstract
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(27): message : see declaration of 'Tokenizer::getContentToSend'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): message : 'EditMode Tokenizer::getEditMode(void)': is abstract
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(28): message : see declaration of 'Tokenizer::getEditMode'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(53,53): warning C4677: 'portConfiguration': signature of non-private member contains assembly private type 'CustomPortConfiguration'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\Endpoint.h(7): message : see declaration of 'CustomPortConfiguration'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u017C' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0107' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,103): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,103): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(701,124): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(701,124): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(714,124): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(714,124): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(619,1): warning C4965: implicit box of integer 0; use nullptr or explicit cast
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(660,1): warning C4965: implicit box of integer 0; use nullptr or explicit cast
+  EndpointConfig.cpp
+  SerialPortManager.cpp
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): warning C4570: 'Tokenizer': is not explicitly declared as abstract but has abstract functions
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): message : 'System::String ^Tokenizer::getContentToSend(void)': is abstract
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(27): message : see declaration of 'Tokenizer::getContentToSend'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): message : 'EditMode Tokenizer::getEditMode(void)': is abstract
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(28): message : see declaration of 'Tokenizer::getEditMode'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(53,53): warning C4677: 'portConfiguration': signature of non-private member contains assembly private type 'CustomPortConfiguration'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\Endpoint.h(7): message : see declaration of 'CustomPortConfiguration'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u017C' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0107' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,45): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,103): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(681,103): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(701,124): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(701,124): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(714,124): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(714,124): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(619,1): warning C4965: implicit box of integer 0; use nullptr or explicit cast
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\ConfigurationForm.h(660,1): warning C4965: implicit box of integer 0; use nullptr or explicit cast
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\SerialPortManager.cpp(143,76): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\SerialPortManager.cpp(143,76): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\SerialPortManager.cpp(150,86): warning C4566: character represented by universal-character-name '\u0142' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\SerialPortManager.cpp(150,86): warning C4566: character represented by universal-character-name '\u0105' cannot be represented in the current code page (1252)
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\SerialPortManager.cpp(175,34): warning C4553: '==': result of expression not used; did you intend '='?
+  TokenizerService.cpp
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): warning C4570: 'Tokenizer': is not explicitly declared as abstract but has abstract functions
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): message : 'System::String ^Tokenizer::getContentToSend(void)': is abstract
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(27): message : see declaration of 'Tokenizer::getContentToSend'
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(22,11): message : 'EditMode Tokenizer::getEditMode(void)': is abstract
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\TokenizerService.h(28): message : see declaration of 'Tokenizer::getEditMode'
+  Generating Code...
+C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\RS232Client\SerialPortManager.cpp(111): warning C4715: 'SerialPortManager::readSerialPort': not all control paths return a value
+  .NETFramework,Version=v4.7.2.AssemblyAttributes.cpp
+  RS232Client.vcxproj -> C:\Users\olale\Documents\Uczelnia\S6\IWSK\IWSK\x64\Release\RS232Client.exe

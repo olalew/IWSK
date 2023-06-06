@@ -57,6 +57,7 @@ int SerialPortManager::readSerialPort(HANDLE serialHandle, System::String^% rece
 
 	bool headerRead = false;
 	char headerBuffer[5] = { 0 }; // Array to store the header bytes
+	int messageSize = 0;
 
 	while (shouldContinue) {
 		// Read the data
@@ -70,6 +71,7 @@ int SerialPortManager::readSerialPort(HANDLE serialHandle, System::String^% rece
 					if (headerBuffer[0] == 0) {
 						return headerBuffer[0];
 					}
+					memcpy(&messageSize, &headerBuffer[1], sizeof(int));
 
 					headerRead = true;
 				}
@@ -86,9 +88,19 @@ int SerialPortManager::readSerialPort(HANDLE serialHandle, System::String^% rece
 				receivedData += gcnew System::String(temp.c_str());
 			}
 
-			if (receivedData != nullptr && (terminator->Length == 0 || receivedData->Contains(terminator))) {
+			if (receivedData != nullptr && terminator->Length != 0 && receivedData->Contains(terminator)) {
 				// Stop reading if the condition is met
 				return headerBuffer[0];
+			}
+
+			if (terminator->Length == 0) {
+				if (messageSize == 0) {
+					return headerBuffer[0];
+				}
+				// we need to calculate the length of the message
+				if (receivedData != nullptr && messageSize <= receivedData->Length) {
+					return headerBuffer[0];
+				}
 			}
 		}
 		else {
@@ -168,8 +180,19 @@ HANDLE SerialPortManager::setupConnection(HANDLE& serialHandle) {
 	}
 
 	portConfigurationHandle.fParity = portConfigurationHandle.Parity != NOPARITY;
-	portConfigurationHandle.fDtrControl = 1;
-
+	
+	if (portConfiguration->flowControl == 0) {
+		portConfigurationHandle.fOutX = false;  // Wyłącz programową kontrolę XON/XOFF dla danych wychodzących
+		portConfigurationHandle.fDtrControl = DTR_CONTROL_DISABLE;  // Wyłącz sprzętową kontrolę DTR/DSR
+	}
+	else if (portConfiguration->flowControl == 1) {
+		portConfigurationHandle.fDtrControl = DTR_CONTROL_HANDSHAKE;  // Włącz sprzętową kontrolę DTR/DSR
+	}
+	else if (portConfiguration->flowControl == 2) {
+		portConfigurationHandle.fOutX = true;  // Włącz kontrolę XON/XOFF dla danych wychodzących
+		portConfigurationHandle.fInX = true;   // Włącz kontrolę XON/XOFF dla danych przychodzących
+	}
+	
 	if (!SetCommState(serialHandle, &portConfigurationHandle)) {
 		DWORD error = GetLastError();
 		System::Windows::Forms::MessageBox::Show("Nie mo¿na zapisaæ parametrów portu", "B³¹d",

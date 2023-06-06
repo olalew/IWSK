@@ -61,6 +61,16 @@ void EndpointManager::readCOMPortConfiguration(CustomPortConfiguration^ port) {
 
 	port->baudRate = portConfigurationHandle.BaudRate;
 	port->bitCount = portConfigurationHandle.ByteSize;
+
+	if (portConfigurationHandle.fOutX && portConfigurationHandle.fInX) {
+		port->flowControl = 2;
+	}
+	else if (portConfigurationHandle.fDtrControl == DTR_CONTROL_HANDSHAKE) {
+		port->flowControl = 1;
+	}
+	else {
+		port->flowControl = 0;
+	}
 	
 	switch (portConfigurationHandle.StopBits)
 	{
