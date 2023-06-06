@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Endpoint.h"
 #include "TokenizerService.h"
+#include "SerialPortManager.h"
 
 namespace CppCLRWinformsProjekt {
 
@@ -11,7 +12,8 @@ namespace CppCLRWinformsProjekt {
 	using namespace System::Data;
 	using namespace System::Drawing;
 
-	static CustomPortConfiguration portConfiguration;
+	static bool listenBackground = false;
+	static std::string AUTOBAUDING_SEQUENCE = "00000@###";
 
 	/// <summary>
 	/// Zusammenfassung für Form1
@@ -41,6 +43,16 @@ namespace CppCLRWinformsProjekt {
 
 	private:
 		bool portComSet = false;
+		bool messsageAcknowledged = true;
+		DateTime pingStartDatetime;
+	private:
+		Tokenizer^ tokenizer = gcnew StringTokenizer();
+	public:
+		static HANDLE communicationHandle;
+		static bool isCommunicationOpen;
+		static CustomPortConfiguration^ portConfiguration = gcnew CustomPortConfiguration();
+
+#pragma region Control Declaration
 
 	private: System::Windows::Forms::Label^ label1;
 	protected:
@@ -64,14 +76,17 @@ namespace CppCLRWinformsProjekt {
 	private: System::Windows::Forms::RadioButton^ radioButton1;
 	private: System::Windows::Forms::RadioButton^ radioButton2;
 	private: System::Windows::Forms::Label^ label8;
-	private: System::Windows::Forms::ComboBox^ comboBox1;
-	private: System::Windows::Forms::Label^ label9;
-	private: System::Windows::Forms::TextBox^ textBox4;
+	private: System::Windows::Forms::ComboBox^ terminatorComboBox;
+	private: System::Windows::Forms::Label^ ownLabel;
+	private: System::Windows::Forms::TextBox^ ownTerminatorTextBox;
 	private: System::Windows::Forms::Label^ label10;
 	private: System::Windows::Forms::Label^ label11;
 	private: System::Windows::Forms::Button^ button2;
 	private: System::Windows::Forms::Button^ button3;
 	private: System::Windows::Forms::Button^ button4;
+
+
+#pragma endregion
 
 	private:
 		/// <summary>
@@ -107,9 +122,9 @@ namespace CppCLRWinformsProjekt {
 			this->radioButton1 = (gcnew System::Windows::Forms::RadioButton());
 			this->radioButton2 = (gcnew System::Windows::Forms::RadioButton());
 			this->label8 = (gcnew System::Windows::Forms::Label());
-			this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
-			this->label9 = (gcnew System::Windows::Forms::Label());
-			this->textBox4 = (gcnew System::Windows::Forms::TextBox());
+			this->terminatorComboBox = (gcnew System::Windows::Forms::ComboBox());
+			this->ownLabel = (gcnew System::Windows::Forms::Label());
+			this->ownTerminatorTextBox = (gcnew System::Windows::Forms::TextBox());
 			this->label10 = (gcnew System::Windows::Forms::Label());
 			this->label11 = (gcnew System::Windows::Forms::Label());
 			this->button2 = (gcnew System::Windows::Forms::Button());
@@ -133,7 +148,7 @@ namespace CppCLRWinformsProjekt {
 			this->comPortsComboBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comPortsComboBox->FormattingEnabled = true;
 			this->comPortsComboBox->Location = System::Drawing::Point(160, 80);
-			this->comPortsComboBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->comPortsComboBox->Margin = System::Windows::Forms::Padding(2);
 			this->comPortsComboBox->Name = L"comPortsComboBox";
 			this->comPortsComboBox->Size = System::Drawing::Size(108, 21);
 			this->comPortsComboBox->TabIndex = 1;
@@ -143,7 +158,7 @@ namespace CppCLRWinformsProjekt {
 			// 
 			this->textBox1->BorderStyle = System::Windows::Forms::BorderStyle::FixedSingle;
 			this->textBox1->Location = System::Drawing::Point(158, 184);
-			this->textBox1->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->textBox1->Margin = System::Windows::Forms::Padding(2);
 			this->textBox1->Name = L"textBox1";
 			this->textBox1->Size = System::Drawing::Size(108, 20);
 			this->textBox1->TabIndex = 2;
@@ -166,7 +181,7 @@ namespace CppCLRWinformsProjekt {
 				static_cast<System::Int32>(static_cast<System::Byte>(192)), static_cast<System::Int32>(static_cast<System::Byte>(0)));
 			this->saveConfigurationButton->ForeColor = System::Drawing::SystemColors::Control;
 			this->saveConfigurationButton->Location = System::Drawing::Point(54, 396);
-			this->saveConfigurationButton->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->saveConfigurationButton->Margin = System::Windows::Forms::Padding(2);
 			this->saveConfigurationButton->Name = L"saveConfigurationButton";
 			this->saveConfigurationButton->Size = System::Drawing::Size(212, 38);
 			this->saveConfigurationButton->TabIndex = 4;
@@ -190,7 +205,7 @@ namespace CppCLRWinformsProjekt {
 			this->bitsCountComboBox->FormattingEnabled = true;
 			this->bitsCountComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"7", L"8" });
 			this->bitsCountComboBox->Location = System::Drawing::Point(158, 212);
-			this->bitsCountComboBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->bitsCountComboBox->Margin = System::Windows::Forms::Padding(2);
 			this->bitsCountComboBox->Name = L"bitsCountComboBox";
 			this->bitsCountComboBox->Size = System::Drawing::Size(108, 21);
 			this->bitsCountComboBox->TabIndex = 6;
@@ -211,7 +226,7 @@ namespace CppCLRWinformsProjekt {
 			this->controlTypeComboBox->FormattingEnabled = true;
 			this->controlTypeComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"E", L"O", L"N" });
 			this->controlTypeComboBox->Location = System::Drawing::Point(158, 238);
-			this->controlTypeComboBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->controlTypeComboBox->Margin = System::Windows::Forms::Padding(2);
 			this->controlTypeComboBox->Name = L"controlTypeComboBox";
 			this->controlTypeComboBox->Size = System::Drawing::Size(108, 21);
 			this->controlTypeComboBox->TabIndex = 8;
@@ -233,7 +248,7 @@ namespace CppCLRWinformsProjekt {
 			this->stopBitCountComboBox->FormattingEnabled = true;
 			this->stopBitCountComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(2) { L"1", L"2" });
 			this->stopBitCountComboBox->Location = System::Drawing::Point(158, 267);
-			this->stopBitCountComboBox->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->stopBitCountComboBox->Margin = System::Windows::Forms::Padding(2);
 			this->stopBitCountComboBox->Name = L"stopBitCountComboBox";
 			this->stopBitCountComboBox->Size = System::Drawing::Size(108, 21);
 			this->stopBitCountComboBox->TabIndex = 10;
@@ -244,7 +259,7 @@ namespace CppCLRWinformsProjekt {
 			this->refreshButton->BackColor = System::Drawing::SystemColors::MenuHighlight;
 			this->refreshButton->ForeColor = System::Drawing::SystemColors::Control;
 			this->refreshButton->Location = System::Drawing::Point(54, 110);
-			this->refreshButton->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->refreshButton->Margin = System::Windows::Forms::Padding(2);
 			this->refreshButton->Name = L"refreshButton";
 			this->refreshButton->Size = System::Drawing::Size(214, 35);
 			this->refreshButton->TabIndex = 11;
@@ -256,7 +271,7 @@ namespace CppCLRWinformsProjekt {
 			// 
 			this->autoconfigurationButton->BackColor = System::Drawing::SystemColors::ControlDark;
 			this->autoconfigurationButton->Location = System::Drawing::Point(54, 345);
-			this->autoconfigurationButton->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->autoconfigurationButton->Margin = System::Windows::Forms::Padding(2);
 			this->autoconfigurationButton->Name = L"autoconfigurationButton";
 			this->autoconfigurationButton->Size = System::Drawing::Size(214, 38);
 			this->autoconfigurationButton->TabIndex = 12;
@@ -268,7 +283,7 @@ namespace CppCLRWinformsProjekt {
 			// 
 			this->textBox2->BorderStyle = System::Windows::Forms::BorderStyle::None;
 			this->textBox2->Location = System::Drawing::Point(351, 289);
-			this->textBox2->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->textBox2->Margin = System::Windows::Forms::Padding(2);
 			this->textBox2->Multiline = true;
 			this->textBox2->Name = L"textBox2";
 			this->textBox2->Size = System::Drawing::Size(549, 142);
@@ -277,25 +292,38 @@ namespace CppCLRWinformsProjekt {
 			// button1
 			// 
 			this->button1->Location = System::Drawing::Point(772, 449);
-			this->button1->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->button1->Margin = System::Windows::Forms::Padding(2);
 			this->button1->Name = L"button1";
 			this->button1->Size = System::Drawing::Size(128, 38);
 			this->button1->TabIndex = 14;
 			this->button1->Text = L"WYŚLIJ";
 			this->button1->UseVisualStyleBackColor = true;
+			this->button1->Click += gcnew System::EventHandler(this, &ConfigurationForm::sendMessage);
 			// 
 			// textBox3
 			// 
 			this->textBox3->BackColor = System::Drawing::SystemColors::InactiveCaption;
 			this->textBox3->BorderStyle = System::Windows::Forms::BorderStyle::None;
-			this->textBox3->Enabled = false;
-			this->textBox3->Location = System::Drawing::Point(351, 134);
-			this->textBox3->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->textBox3->ReadOnly = true;
+			this->textBox3->Margin = System::Windows::Forms::Padding(2);
 			this->textBox3->Multiline = true;
 			this->textBox3->Name = L"textBox3";
-			this->textBox3->Size = System::Drawing::Size(549, 136);
 			this->textBox3->TabIndex = 15;
 			this->textBox3->Text = L"Read incoming messages here";
+			this->textBox3->ScrollBars = ScrollBars::Vertical;
+
+			Panel^ panel = gcnew Panel();
+			panel->AutoScroll = true;
+
+			//panel->BackColor = System::Drawing::Color::Red; 
+
+			panel->Size = System::Drawing::Size(549, 136);
+			panel->Location = System::Drawing::Point(351, 134);
+
+			textBox3->Dock = DockStyle::Fill;
+			panel->Controls->Add(this->textBox3);
+
+
 			// 
 			// label6
 			// 
@@ -324,6 +352,7 @@ namespace CppCLRWinformsProjekt {
 			this->radioButton1->TabStop = true;
 			this->radioButton1->Text = L"Tekst";
 			this->radioButton1->UseVisualStyleBackColor = true;
+			this->radioButton1->CheckedChanged += gcnew System::EventHandler(this, &ConfigurationForm::radioButton1_CheckedChanged);
 			// 
 			// radioButton2
 			// 
@@ -335,6 +364,7 @@ namespace CppCLRWinformsProjekt {
 			this->radioButton2->TabStop = true;
 			this->radioButton2->Text = L"Hex";
 			this->radioButton2->UseVisualStyleBackColor = true;
+			this->radioButton2->CheckedChanged += gcnew System::EventHandler(this, &ConfigurationForm::radioButton2_CheckedChanged);
 			// 
 			// label8
 			// 
@@ -345,29 +375,33 @@ namespace CppCLRWinformsProjekt {
 			this->label8->TabIndex = 21;
 			this->label8->Text = L"Terminator";
 			// 
-			// comboBox1
+			// terminatorComboBox
 			// 
-			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Location = System::Drawing::Point(457, 53);
-			this->comboBox1->Name = L"comboBox1";
-			this->comboBox1->Size = System::Drawing::Size(108, 21);
-			this->comboBox1->TabIndex = 22;
+			this->terminatorComboBox->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
+			this->terminatorComboBox->FormattingEnabled = true;
+			this->terminatorComboBox->Items->AddRange(gcnew cli::array< System::Object^  >(5) { L"NONE", L"CR", L"LF", L"CR-LF", L"CUSTOM" });
+			this->terminatorComboBox->Location = System::Drawing::Point(457, 53);
+			this->terminatorComboBox->Name = L"terminatorComboBox";
+			this->terminatorComboBox->Size = System::Drawing::Size(108, 21);
+			this->terminatorComboBox->TabIndex = 22;
+			this->terminatorComboBox->SelectedIndexChanged += gcnew System::EventHandler(this, &ConfigurationForm::comboBox1_SelectedIndexChanged);
 			// 
-			// label9
+			// ownLabel
 			// 
-			this->label9->AutoSize = true;
-			this->label9->Location = System::Drawing::Point(351, 91);
-			this->label9->Name = L"label9";
-			this->label9->Size = System::Drawing::Size(44, 13);
-			this->label9->TabIndex = 23;
-			this->label9->Text = L"Własny";
+			this->ownLabel->AutoSize = true;
+			this->ownLabel->Location = System::Drawing::Point(351, 91);
+			this->ownLabel->Name = L"ownLabel";
+			this->ownLabel->Size = System::Drawing::Size(44, 13);
+			this->ownLabel->TabIndex = 23;
+			this->ownLabel->Text = L"Własny";
+			this->ownLabel->Visible = false;
 			// 
-			// textBox4
+			// ownTerminatorTextBox
 			// 
-			this->textBox4->Location = System::Drawing::Point(457, 88);
-			this->textBox4->Name = L"textBox4";
-			this->textBox4->Size = System::Drawing::Size(108, 20);
-			this->textBox4->TabIndex = 24;
+			this->ownTerminatorTextBox->Location = System::Drawing::Point(457, 88);
+			this->ownTerminatorTextBox->Name = L"ownTerminatorTextBox";
+			this->ownTerminatorTextBox->Size = System::Drawing::Size(108, 20);
+			this->ownTerminatorTextBox->TabIndex = 24;
 			// 
 			// label10
 			// 
@@ -397,6 +431,7 @@ namespace CppCLRWinformsProjekt {
 			this->button2->TabIndex = 27;
 			this->button2->Text = L"STOP";
 			this->button2->UseVisualStyleBackColor = true;
+			this->button2->Click += gcnew System::EventHandler(this, &ConfigurationForm::button2_Click);
 			// 
 			// button3
 			// 
@@ -406,6 +441,7 @@ namespace CppCLRWinformsProjekt {
 			this->button3->TabIndex = 28;
 			this->button3->Text = L"START";
 			this->button3->UseVisualStyleBackColor = true;
+			this->button3->Click += gcnew System::EventHandler(this, &ConfigurationForm::button3_Click);
 			// 
 			// button4
 			// 
@@ -415,6 +451,7 @@ namespace CppCLRWinformsProjekt {
 			this->button4->TabIndex = 29;
 			this->button4->Text = L"PING";
 			this->button4->UseVisualStyleBackColor = true;
+			this->button4->Click += gcnew System::EventHandler(this, &ConfigurationForm::button4_Click);
 			// 
 			// ConfigurationForm
 			// 
@@ -426,15 +463,16 @@ namespace CppCLRWinformsProjekt {
 			this->Controls->Add(this->button2);
 			this->Controls->Add(this->label11);
 			this->Controls->Add(this->label10);
-			this->Controls->Add(this->textBox4);
-			this->Controls->Add(this->label9);
-			this->Controls->Add(this->comboBox1);
+			this->Controls->Add(this->ownTerminatorTextBox);
+			this->Controls->Add(this->ownLabel);
+			this->Controls->Add(this->terminatorComboBox);
 			this->Controls->Add(this->label8);
 			this->Controls->Add(this->radioButton2);
 			this->Controls->Add(this->radioButton1);
 			this->Controls->Add(this->label7);
 			this->Controls->Add(this->label6);
-			this->Controls->Add(this->textBox3);
+			this->Controls->Add(panel);
+			//this->Controls->Add(this->textBox3);
 			this->Controls->Add(this->button1);
 			this->Controls->Add(this->textBox2);
 			this->Controls->Add(this->autoconfigurationButton);
@@ -450,7 +488,7 @@ namespace CppCLRWinformsProjekt {
 			this->Controls->Add(this->textBox1);
 			this->Controls->Add(this->comPortsComboBox);
 			this->Controls->Add(this->label1);
-			this->Margin = System::Windows::Forms::Padding(2, 2, 2, 2);
+			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"ConfigurationForm";
 			this->Text = L"Form1";
 			this->ResumeLayout(false);
@@ -458,6 +496,9 @@ namespace CppCLRWinformsProjekt {
 
 		}
 #pragma endregion
+
+#pragma region Configuration
+
 	private: System::Void label1_Click(System::Object^ sender, System::EventArgs^ e) {
 	}
 	private: System::Void label2_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -473,12 +514,18 @@ namespace CppCLRWinformsProjekt {
 
 	}
 	private: System::Void textBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-		if (System::Text::RegularExpressions::Regex::IsMatch(textBox1->Text, "[^0-9]"))
+		if (System::Text::RegularExpressions::Regex::IsMatch(textBox1->Text, "[0-9]+"))
 		{
 			int value = System::Int32::Parse(textBox1->Text);
 			if (value > 115000) {
 				textBox1->Text = textBox1->Text->Remove(textBox1->Text->Length - 1);
 			}
+			else {
+				ConfigurationForm::portConfiguration->baudRate = value;
+			}
+		}
+		else {
+			textBox1->Text = textBox1->Text->Remove(textBox1->Text->Length - 1);
 		}
 	}
 
@@ -491,5 +538,183 @@ namespace CppCLRWinformsProjekt {
 		this->controlTypeComboBox->Enabled = enabled;
 		this->stopBitCountComboBox->Enabled = enabled;
 	}
+	private: System::Void comboBox1_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e);
+
+	private: System::Void updateTerminatorString();
+
+	private: System::Void radioButton1_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		handleEditorChanged();
+	}
+
+	private: System::Void radioButton2_CheckedChanged(System::Object^ sender, System::EventArgs^ e) {
+		handleEditorChanged();
+	}
+
+
+	private: System::Void handleEditorChanged() {
+		TokenizerMode mode = this->tokenizer->getTokenizerMode();
+
+		bool textEditorSelected = this->radioButton1->Checked;
+
+		if (textEditorSelected && this->tokenizer->getEditMode() != EditMode::TEXT) {
+			this->tokenizer = gcnew StringTokenizer();
+		}
+
+		if (!textEditorSelected && this->tokenizer->getEditMode() != EditMode::HEX) {
+			this->tokenizer = gcnew HexTokenizer();
+		}
+
+		this->tokenizer->setTerminator(mode, this->tokenizer->getCustomTerminator());
+	}
+
+
+#pragma endregion
+
+	private:
+		System::Void handle_reading(Object^ data) {
+			Tokenizer^ tokenizer = static_cast<Tokenizer^>(data);
+
+			while (CppCLRWinformsProjekt::listenBackground) {
+				System::String^ message;
+				int message_type = SerialPortManager::readSerialPort(
+					ConfigurationForm::communicationHandle, message, CppCLRWinformsProjekt::listenBackground,
+					tokenizer->getTerminator());
+
+				if (message_type == -1) {
+					continue;
+				}
+
+				// 0 ping request
+				// 3 - ping acknowledgement
+				if (message_type == 0) {
+					DateTime now = DateTime::Now;
+					String^ timestamp = now.ToString() + tokenizer->getTerminator();
+
+					bool success = SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, timestamp,
+						MessageTypesEnum::PING_ACKNOWLEDGEMENT, timestamp->Length);
+					continue;
+				}
+
+				if (message_type == 1) {
+					UpdateResponseText(message);
+					// send acknowledgement message
+					bool success = SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle,
+						tokenizer->getTerminator(), MessageTypesEnum::MESSAGE_ACKNOWLEDGEMENT, tokenizer->getTerminator()->Length);
+					continue;
+				}
+
+				if (message_type == 2) {
+					// message acknowledged - allow to send the next message
+					ConfigurationForm::messsageAcknowledged = true;
+					DisplayAcknowledgmentBox(NULL);
+				}
+
+				if (message_type == 3) {
+					ConfigurationForm::messsageAcknowledged = true;
+
+					DateTime pingStart = pingStartDatetime;
+					DateTime pingResponseReceived = DateTime::Now;
+					DateTime pingRequestReceived = DateTime::Parse(message);
+
+					TimeSpan timeDiffPingStartToResponse = pingResponseReceived.Subtract(pingStart);
+					TimeSpan timeDiffPingStartToRequest = pingRequestReceived.Subtract(pingStart);
+
+					String^ result = "Ping Start: " + pingStart.ToString() + "\n"
+						+ "Ping Request Received: " + pingRequestReceived.ToString() + "\n"
+						+ "Ping Response Received: " + pingResponseReceived.ToString() + "\n\n"
+						+ "Time Difference (Ping Start to Request): " + timeDiffPingStartToRequest.TotalMilliseconds.ToString() + " ms\n"
+						+"Time Difference (Ping Start to Response): " + timeDiffPingStartToResponse.TotalMilliseconds.ToString() + " ms";
+						
+
+					// Display the message box
+					DisplayPingResultBox(result);
+				}
+			}
+		}
+
+	private:
+		void UpdateResponseText(System::String^ text) {
+			if (textBox3->InvokeRequired)
+			{
+				textBox3->Invoke(gcnew Action<System::String^>(this, &ConfigurationForm::UpdateResponseText), text);
+			}
+			else
+			{
+				textBox3->AppendText(Environment::NewLine + "<message>" + text + "</message>");
+			}
+		}
+
+		void DisplayAcknowledgmentBox(System::Object^ args) {
+			if (textBox3->InvokeRequired)
+			{
+				textBox3->Invoke(gcnew Action<System::Object^>(this, &ConfigurationForm::DisplayAcknowledgmentBox), NULL);
+			}
+			else
+			{
+				textBox2->Clear();
+			}
+		}
+
+		void DisplayPingResultBox(System::String^ args) {
+			if (textBox3->InvokeRequired)
+			{
+				textBox3->Invoke(gcnew Action<System::String^>(this, &ConfigurationForm::DisplayPingResultBox), args);
+			}
+			else
+			{
+				MessageBox::Show(args, "Ping Information", MessageBoxButtons::OK, MessageBoxIcon::Information);
+			}
+		}
+
+	private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (!CppCLRWinformsProjekt::ConfigurationForm::isCommunicationOpen) {
+			System::Windows::Forms::MessageBox::Show("Najpierw należy nawiązać połączenie na porcie COM", "Błąd",
+				System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
+			return;
+		}
+
+		if (CppCLRWinformsProjekt::listenBackground) return;
+		CppCLRWinformsProjekt::listenBackground = true;
+
+
+		// Create a new thread and pass parameters using the delegate
+		System::Threading::Thread^ myThread =
+			gcnew System::Threading::Thread(gcnew System::Threading::ParameterizedThreadStart(
+				this, &ConfigurationForm::handle_reading));
+
+		this->label11->Text = "Started";
+		myThread->Start(this->tokenizer);
+	}
+
+	private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
+		if (!ConfigurationForm::messsageAcknowledged) {
+			System::Windows::Forms::MessageBox::Show("Nie otrzymano potwierdzenia poprzedniej operacji (Message not akcnowledged)", "Błąd",
+				System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
+			return;
+		}
+
+		this->pingStartDatetime = DateTime::Now;
+		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, "", MessageTypesEnum::PING, 0);
+
+		ConfigurationForm::messsageAcknowledged = false;
+	}
+
+	private: System::Void sendMessage(System::Object^ sender, System::EventArgs^ e) {
+		if (!ConfigurationForm::messsageAcknowledged) {
+			System::Windows::Forms::MessageBox::Show("Nie otrzymano potwierdzenia poprzedniej operacji (Message not akcnowledged)", "Błąd",
+				System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
+			return;
+		}
+
+		System::String^ toWrite = this->textBox2->Text->ToString() + tokenizer->getTerminator();
+		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, toWrite, MessageTypesEnum::NORMAL_MESSAGE, toWrite->Length);
+	}
+
+	private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e) {
+		CppCLRWinformsProjekt::listenBackground = false;
+		this->label11->Text = "Stopped";
+	}
 	};
+
+
 }

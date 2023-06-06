@@ -35,6 +35,12 @@
     <ClInclude Include="TokenizerService.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="SerialPortManager.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="EndpointConfig.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CppCLR_WinformsProjekt.cpp">
@@ -53,6 +59,12 @@
       <Filter>Quelldateien</Filter>
     </ClCompile>
     <ClCompile Include="TokenizerService.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="SerialPortManager.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="EndpointConfig.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,16 +4,32 @@
 #include <vector>
 #include <string>
 
-class CustomPortConfiguration {
+ref class CustomPortConfiguration {
 	
 public:
-	std::string portName;
-	int baudRate;
-	int bitCount;
-	char dataControlType;
-	int stopBitCount;
+	System::String^ portName;
+	System::Int32 baudRate;
+	System::Int32 bitCount;
+	System::Char dataControlType;
+	System::Int32 stopBitCount;
+
+	CustomPortConfiguration() {}
+
+	// Copy constructor
+	CustomPortConfiguration(const CustomPortConfiguration% other) {
+		portName = other.portName;
+		baudRate = other.baudRate;
+		bitCount = other.bitCount;
+		dataControlType = other.dataControlType;
+		stopBitCount = other.stopBitCount;
+	}
+
+	std::string getPortName();
 };
 
-std::vector<std::string> listCOMPorts();
 
-void readCOMPortConfiguration(CustomPortConfiguration& port);
+ref class EndpointManager
+{
+public: static std::vector<std::string> listCOMPorts();
+public: static void readCOMPortConfiguration(CustomPortConfiguration^ port);
+};

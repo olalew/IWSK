@@ -12,31 +12,94 @@ enum TokenizerMode {
 	CUSTOM
 };
 
-class StringTokenizer
-{
-private:
-	TokenizerMode mode;
-	std::string customTerminator;
-	std::string content;
-
-public:
-	StringTokenizer(TokenizerMode _mode, std::string _customTerminator, std::string _content)
-		: mode(_mode), customTerminator(_customTerminator), content(_content)  {}
-
-	StringTokenizer(TokenizerMode _mode, std::string _content)
-		: mode(_mode), content(_content) {}
-
-	std::string getContentToSend();
+enum EditMode {
+	TEXT,
+	HEX
 };
 
-class HexTokenizer
+
+
+ref class Tokenizer {
+protected:
+	TokenizerMode mode = TokenizerMode::CR;
+	System::String^ customTerminator;
+public:
+	virtual System::String^ getContentToSend() = 0;
+	virtual EditMode getEditMode() = 0;
+
+	void setTerminator(TokenizerMode mode, System::String^ customTerminator) {
+		this->mode = mode;
+		this->customTerminator = customTerminator;
+	}
+
+	System::String^ getTerminator() {
+		switch (mode) {
+		case TokenizerMode::CR:
+			return "\r";
+		case TokenizerMode::LF:
+			return "\n";
+		case TokenizerMode::CR_LF:
+			return "\r\n";
+		case TokenizerMode::CUSTOM:
+			return customTerminator;
+		default:
+			return "";
+		}
+	}
+
+	TokenizerMode getTokenizerMode() {
+		return this->mode;
+	}
+
+	System::String^ getCustomTerminator() {
+		return this->customTerminator;
+	}
+
+	static TokenizerMode parseTokenizerModeString(std::string str) {
+		if (str == "NONE") return TokenizerMode::NONE;
+		if (str == "CR") return TokenizerMode::CR;
+		if (str == "LF") return TokenizerMode::LF;
+		if (str == "CR-LF") return TokenizerMode::CR_LF;
+		if (str == "CUSTOM") return TokenizerMode::CUSTOM;
+
+		return TokenizerMode::NONE;
+	}
+};
+
+ref class StringTokenizer : public Tokenizer
 {
 private:
-	TokenizerMode mode;
-	std::string customTerminator;
-	std::vector<char> content;
+	System::String^ content;
 
 public:
-	std::string getContentToSend();
+	StringTokenizer() {}
+	StringTokenizer(TokenizerMode mode, System::String^ customTerminator, System::String^ content) {
+		this->mode = mode;
+		this->customTerminator = customTerminator;
+		this->content = content;
+	}
+
+	virtual System::String^ getContentToSend() override;
+
+	virtual EditMode getEditMode() override {
+		return EditMode::TEXT;
+	}
+};
+
+ref class HexTokenizer: public Tokenizer
+{
+private:
+	System::Collections::Generic::List<char>^ content;
+
+public:
+	HexTokenizer() {
+		content = gcnew System::Collections::Generic::List<char>();
+	}
+
+	virtual System::String^ getContentToSend() override;
+
+	virtual EditMode getEditMode() override {
+		return EditMode::HEX;
+	}
 };
 

@@ -1,9 +1,9 @@
 #include "pch.h"
 #include "TokenizerService.h"
 
-std::string StringTokenizer::getContentToSend() {
+System::String^ StringTokenizer::getContentToSend() {
 	
-	std::string content;
+	System::String^ content;
 	
 	switch (mode)
 	{
@@ -29,9 +29,8 @@ std::string StringTokenizer::getContentToSend() {
 	return content;
 }
 
-std::string HexTokenizer::getContentToSend() {
-	std::string content(this->content.begin(), this->content.end());
-	
-	StringTokenizer tokenizer(this->mode, this->customTerminator, content);
-	return tokenizer.getContentToSend();
+System::String^ HexTokenizer::getContentToSend() {
+	//StringTokenizer tokenizer(this->mode, this->customTerminator, content);
+	//return tokenizer.getContentToSend();
+	return "";
 }
