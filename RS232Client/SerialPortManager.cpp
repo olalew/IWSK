@@ -178,9 +178,9 @@ HANDLE SerialPortManager::setupConnection(HANDLE& serialHandle) {
 	COMMTIMEOUTS timeouts = { 0 };
 	timeouts.ReadIntervalTimeout = MAXDWORD;      // Allow immediate return for read operations
 	timeouts.ReadTotalTimeoutMultiplier = 0;      // Disable additional timeout based on bytes to read
-	timeouts.ReadTotalTimeoutConstant = 100;      // Set a read timeout of 100 milliseconds
+	timeouts.ReadTotalTimeoutConstant = 1000;      // Set a read timeout of 1000 milliseconds
 	timeouts.WriteTotalTimeoutMultiplier = 0;     // Disable additional timeout based on bytes to write
-	timeouts.WriteTotalTimeoutConstant = 0;       // Disable constant timeout for write operations
+	timeouts.WriteTotalTimeoutConstant = 1000;       // Disable constant timeout for write operations
 
 	if (!SetCommTimeouts(serialHandle, &timeouts)) {
 		System::Windows::Forms::MessageBox::Show("Nie uda³o siê ustawiæ timeoutów", "B³¹d",
