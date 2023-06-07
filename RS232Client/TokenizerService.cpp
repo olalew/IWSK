@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "TokenizerService.h"
 
+
 System::String^ StringTokenizer::getContentToSend() {
 	
 	System::String^ content;
@@ -29,7 +30,9 @@ System::String^ StringTokenizer::getContentToSend() {
 	return content;
 }
 
+
 System::String^ HexTokenizer::getContentToSend() {
+
 	//StringTokenizer tokenizer(this->mode, this->customTerminator, content);
 	//return tokenizer.getContentToSend();
 	return "";

@@ -4,6 +4,7 @@
 #include <msclr/marshal_cppstd.h>
 #include "Endpoint.h"
 #include "ConfigurationForm.h"
+#include <sstream>
 #include "EndpointConfig.h"
 
 using namespace System;
@@ -90,6 +91,7 @@ int SerialPortManager::readSerialPort(HANDLE serialHandle, System::String^% rece
 
 			if (receivedData != nullptr && terminator->Length != 0 && receivedData->Contains(terminator)) {
 				// Stop reading if the condition is met
+				receivedData = receivedData->Replace(terminator, "");
 				return headerBuffer[0];
 			}
 
@@ -192,6 +194,10 @@ HANDLE SerialPortManager::setupConnection(HANDLE& serialHandle) {
 		portConfigurationHandle.fOutX = true;  // Włącz kontrolę XON/XOFF dla danych wychodzących
 		portConfigurationHandle.fInX = true;   // Włącz kontrolę XON/XOFF dla danych przychodzących
 	}
+	else if (portConfiguration->flowControl == 3) {
+		portConfigurationHandle.fRtsControl = RTS_CONTROL_HANDSHAKE;
+		portConfigurationHandle.fOutxCtsFlow = TRUE;
+	}
 	
 	if (!SetCommState(serialHandle, &portConfigurationHandle)) {
 		DWORD error = GetLastError();
@@ -225,4 +231,35 @@ HANDLE SerialPortManager::setupConnection(HANDLE& serialHandle) {
 
 	// connection should now be established
 	return serialHandle;
+}
+
+
+char* HexStringToByteArray(const std::string& hexString)
+{
+	std::istringstream hexStream(hexString);
+	hexStream >> std::hex >> std::noskipws;
+
+	// Count the number of byte values
+	unsigned int byteCount = 0;
+	unsigned int byteValue;
+	while (hexStream >> byteValue)
+	{
+		byteCount++;
+	}
+
+	// Allocate memory for the char array
+	char* byteArray = new char[byteCount];
+
+	// Reset the stringstream
+	hexStream.clear();
+	hexStream.seekg(0);
+
+	// Process each pair of hexadecimal characters
+	unsigned int index = 0;
+	while (hexStream >> byteValue)
+	{
+		byteArray[index++] = static_cast<char>(byteValue);
+	}
+
+	return byteArray;
 }

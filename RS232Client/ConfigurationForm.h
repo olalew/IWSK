@@ -461,7 +461,7 @@ namespace CppCLRWinformsProjekt {
 			// 
 			this->comboBox1->DropDownStyle = System::Windows::Forms::ComboBoxStyle::DropDownList;
 			this->comboBox1->FormattingEnabled = true;
-			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(3) { L"NONE", L"HARDWARE", L"SOFTWARE" });
+			this->comboBox1->Items->AddRange(gcnew cli::array< System::Object^  >(4) { L"NONE", L"DTR/DSR", L"SOFTWARE", L"RST/CTS" });
 			this->comboBox1->Location = System::Drawing::Point(211, 368);
 			this->comboBox1->Name = L"comboBox1";
 			this->comboBox1->Size = System::Drawing::Size(143, 24);
@@ -590,7 +590,7 @@ namespace CppCLRWinformsProjekt {
 					ConfigurationForm::communicationHandle, message, CppCLRWinformsProjekt::listenBackground,
 					tokenizer->getTerminator());
 
-				if (message_type == -1) {
+				if (message_type == -1 || !CppCLRWinformsProjekt::listenBackground) {
 					continue;
 				}
 
@@ -624,20 +624,22 @@ namespace CppCLRWinformsProjekt {
 
 					DateTime pingStart = pingStartDatetime;
 					DateTime pingResponseReceived = DateTime::Now;
-					DateTime pingRequestReceived = DateTime::Parse(message);
+					DateTime pingRequestReceived;
 
-					TimeSpan timeDiffPingStartToResponse = pingResponseReceived.Subtract(pingStart);
-					TimeSpan timeDiffPingStartToRequest = pingRequestReceived.Subtract(pingStart);
+					if (DateTime::TryParse(message, pingRequestReceived)) {
+						TimeSpan timeDiffPingStartToResponse = pingResponseReceived.Subtract(pingStart);
+						TimeSpan timeDiffPingStartToRequest = pingRequestReceived.Subtract(pingStart);
 
-					String^ result = "Ping Start: " + pingStart.ToString() + "\n"
-						+ "Ping Request Received: " + pingRequestReceived.ToString() + "\n"
-						+ "Ping Response Received: " + pingResponseReceived.ToString() + "\n\n"
-						+ "Time Difference (Ping Start to Request): " + timeDiffPingStartToRequest.TotalMilliseconds.ToString() + " ms\n"
-						+ "Time Difference (Ping Start to Response): " + timeDiffPingStartToResponse.TotalMilliseconds.ToString() + " ms";
+						String^ result = "Ping Start: " + pingStart.ToString() + "\n"
+							+ "Ping Request Received: " + pingRequestReceived.ToString() + "\n"
+							+ "Ping Response Received: " + pingResponseReceived.ToString() + "\n\n"
+							+ "Time Difference (Ping Start to Request): " + timeDiffPingStartToRequest.TotalMilliseconds.ToString() + " ms\n"
+							+ "Time Difference (Ping Start to Response): " + timeDiffPingStartToResponse.TotalMilliseconds.ToString() + " ms";
 
 
-					// Display the message box
-					DisplayPingResultBox(result);
+						// Display the message box
+						DisplayPingResultBox(result);
+					}
 				}
 			}
 		}
@@ -697,11 +699,11 @@ namespace CppCLRWinformsProjekt {
 	}
 
 	private: System::Void button4_Click(System::Object^ sender, System::EventArgs^ e) {
-		if (!ConfigurationForm::messsageAcknowledged) {
+		/*if (!ConfigurationForm::messsageAcknowledged) {
 			System::Windows::Forms::MessageBox::Show("Nie otrzymano potwierdzenia poprzedniej operacji (Message not akcnowledged)", "Błąd",
 				System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
 			return;
-		}
+		}*/
 
 		this->pingStartDatetime = DateTime::Now;
 		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, "", MessageTypesEnum::PING, 0);
@@ -710,11 +712,11 @@ namespace CppCLRWinformsProjekt {
 	}
 
 	private: System::Void sendMessage(System::Object^ sender, System::EventArgs^ e) {
-		if (!ConfigurationForm::messsageAcknowledged) {
+		/*if (!ConfigurationForm::messsageAcknowledged) {
 			System::Windows::Forms::MessageBox::Show("Nie otrzymano potwierdzenia poprzedniej operacji (Message not akcnowledged)", "Błąd",
 				System::Windows::Forms::MessageBoxButtons::OK, System::Windows::Forms::MessageBoxIcon::Information);
 			return;
-		}
+		}*/
 
 		System::String^ toWrite = this->textBox2->Text->ToString() + tokenizer->getTerminator();
 		SerialPortManager::writeSerialPort(ConfigurationForm::communicationHandle, toWrite, MessageTypesEnum::NORMAL_MESSAGE, toWrite->Length);
